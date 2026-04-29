@@ -10,7 +10,6 @@ in
 {
 	home.username = "maxcaspar";
 	home.homeDirectory = "/home/maxcaspar";
-	programs.git.enable = true;
 	home.stateVersion = "25.11";
 	programs.bash = {
 		enable = true;
@@ -18,6 +17,12 @@ in
 			btw = "echo I use nixOS, btw";
 		};
 	};
+  
+  programs.git = {
+    enable = true;
+    userName = "maxcaspar";
+    userEmail = "git@maxcaspar.com";
+  };
 
   xdg.configFile = builtins.mapAttrs
     (name: subpath: {
@@ -36,5 +41,21 @@ in
 	  gcc #used to compile parsers in neovim config
 	  nodejs
 	  neofetch
+    gh
+    # bash command to rebuild+switch then git commit and push dotfiles 
+    (writeShellScriptBin "nixos-switch" ''
+      sudo nixos-rebuild switch --flake ~/nixos-dotfiles#hermes
+      cd ~/nixos-dotfiles
+      git add flake.nix flake.lock configuration.nix hardware-configuration.nix home.nix 
+      git commit -m "$1"
+      git push
+    '')
+    # bash command to git commit and push dotfiles
+    (writeShellScriptBin "nixos-commit" ''
+      cd ~/nixos-dotfiles
+      git add flake.nix flake.lock configuration.nix hardware-configuration.nix home.nix 
+      git commit -m "$1"
+      git push
+    '')
 	];
 }
