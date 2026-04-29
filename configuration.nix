@@ -6,7 +6,8 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
@@ -42,8 +43,8 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   # Add Hyprland as an extra GDM session while keeping GNOME available.
   programs.hyprland = {
@@ -63,11 +64,11 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics.enable = true;
   hardware.nvidia = {
-  	modesetting.enable = true;
-	powerManagement.enable = false;
-	open = false;
-	nvidiaSettings = true;
-  }; 
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    open = false;
+    nvidiaSettings = true;
+  };
 
   boot.kernelModules = [ "nvidia" ];
 
@@ -128,7 +129,7 @@
     description = "maxcaspar";
     extraGroups = [ "networkmanager" "wheel" "podman" ];
     packages = with pkgs; [
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
