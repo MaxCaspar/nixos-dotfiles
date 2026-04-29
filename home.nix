@@ -41,6 +41,8 @@ in
 	  gcc #used to compile parsers in neovim config
 	  nodejs
 	  neofetch
+    btop
+    nvitop
     gh
     # bash command to rebuild+switch then git commit and push dotfiles 
     (writeShellScriptBin "nixos-switch" ''
