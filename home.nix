@@ -14,9 +14,6 @@ in
   home.stateVersion = "25.11";
   programs.bash = {
     enable = true;
-    shellAliases = {
-      btw = "echo I use nixOS, btw";
-    };
   };
 
   programs.git = {
@@ -45,6 +42,13 @@ in
     gcc # C compiler for Neovim parser builds
     nodejs # JavaScript runtime for tooling
     gh # GitHub CLI
+    # ns: interactive nix package search using fzf
+    (writeShellApplication {
+      name = "ns";
+      runtimeInputs = [ fzf nix-search-tv ];
+      text = builtins.readFile "${nix-search-tv.src}/nixpkgs.sh";
+      excludeShellChecks = [ "SC2016" ];
+    })
 
     # General system info and monitoring.
     neofetch # system summary
