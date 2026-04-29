@@ -57,6 +57,19 @@
 
   boot.kernelModules = [ "nvidia" ];
 
+  # Virtualisation via Podman
+  virtualisation = {
+    containers.enable = true;
+
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
+
+  hardware.nvidia-container-toolkit.enable = true;
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
@@ -89,7 +102,7 @@
   users.users.maxcaspar = {
     isNormalUser = true;
     description = "maxcaspar";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "podman" ];
     packages = with pkgs; [
     #  thunderbird
     ];
