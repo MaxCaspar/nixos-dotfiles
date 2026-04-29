@@ -64,16 +64,13 @@ in
     playerctl # media player control CLI
     brightnessctl # brightness control CLI
 
-    # bash command to rebuild+switch then git commit and push dotfiles 
-    (writeShellScriptBin "nixos-switch" ''
-      sudo nixos-rebuild switch --flake ~/nixos-dotfiles#hermes
-      cd ~/nixos-dotfiles
-      git add flake.nix flake.lock configuration.nix hardware-configuration.nix home.nix config
-      git commit -m "$1"
-      git push
-    '')
     # bash command to git commit and push dotfiles
     (writeShellScriptBin "nixos-commit" ''
+      set -e
+      if [ -z "$1" ]; then
+        echo "Forgot the commit message, silly-billy :)"
+        exit 1
+      fi
       cd ~/nixos-dotfiles
       git add flake.nix flake.lock configuration.nix hardware-configuration.nix home.nix config
       git commit -m "$1"
