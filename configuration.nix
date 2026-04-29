@@ -45,6 +45,20 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  # Add Hyprland as an extra GDM session while keeping GNOME available.
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-hyprland
+    ];
+  };
+
   # RTX 3090 Nvidia
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics.enable = true;
@@ -79,6 +93,13 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Keep Bluetooth available outside GNOME too.
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+  services.blueman.enable = true;
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -94,6 +115,9 @@
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
+
+  security.polkit.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
