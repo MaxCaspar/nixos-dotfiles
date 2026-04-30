@@ -1,0 +1,39 @@
+format = "$custom$hostname$directory$git_branch$git_status$cmd_duration$character"
+
+[username]
+disabled = true
+
+[nix_shell]
+disabled = true
+
+[custom.user]
+command = "echo $USER"
+when = '[ -z "$IN_NIX_SHELL" ]'
+format = "[$output]($style) in "
+style = "bold green"
+
+[custom.nix_user]
+command = "echo $USER"
+when = '[ -n "$IN_NIX_SHELL" ]'
+format = "[\\[$output\\]](dimmed) in "
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style) "
+style = "bold blue"
+disabled = false
+
+[directory]
+style = "bold cyan"
+truncation_length = 3
+
+[git_branch]
+format = "on [$symbol$branch]($style) "
+style = "bold purple"
+
+[git_status]
+style = "bold red"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"

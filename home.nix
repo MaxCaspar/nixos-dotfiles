@@ -14,6 +14,10 @@ in
   home.stateVersion = "25.11";
   programs.bash = {
     enable = true;
+    initExtra = ''
+      eval "$(starship init bash)"
+      [ -z "$IN_NIX_SHELL" ] && fastfetch
+    '';
   };
 
   programs.git = {
@@ -24,17 +28,20 @@ in
     };
   };
 
-  xdg.configFile = builtins.mapAttrs
+  xdg.configFile = (builtins.mapAttrs
     (name: subpath: {
       source = create_symlink "${dotfiles}/${subpath}";
       recursive = true;
     })
-    configs;
+    configs) // {
+    "starship.toml".source = create_symlink "${dotfiles}/starship.toml";
+  };
 
   home.packages = with pkgs; [
     # Shell, editor, and development tools.
     claude-code # Claude Code CLI
     pkgs-unstable.codex # Codex CLI from unstable nixpkgs
+    starship # shell prompt
     ripgrep # fast text search
     neovim # editor
     nil # Nix language server
@@ -51,7 +58,7 @@ in
     })
 
     # General system info and monitoring.
-    neofetch # system summary
+    fastfetch # system info on terminal open
     btop # process and system monitor
     nvitop # NVIDIA GPU monitor
 
