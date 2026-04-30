@@ -153,6 +153,18 @@
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  
+  # Hermes Agent CLI
+  services.hermes-agent = {
+    enable = true;
+    addToSystemPackages = true;
+    settings = {
+      model = {
+        base_url = "http://127.0.0.1:8080/v1";
+        default = "qwen3.5-27b-q5kx";
+      };
+    };
+  };
 
   system.stateVersion = "25.11"; # Did you read the comment?
 
