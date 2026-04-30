@@ -61,6 +61,9 @@ in
     fastfetch # system info on terminal open
     btop # process and system monitor
     nvitop # NVIDIA GPU monitor
+    
+    # Programs
+    obsidian
 
     # Hyprland desktop utilities.
     waybar # status bar

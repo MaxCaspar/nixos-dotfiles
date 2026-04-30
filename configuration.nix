@@ -147,6 +147,9 @@
     git
     alacritty
     google-chrome
+    llama-cpp
+    python313Packages.huggingface-hub
+    curl
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
