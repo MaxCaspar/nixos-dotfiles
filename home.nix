@@ -34,6 +34,13 @@ in
     };
   };
 
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode.override {
+      commandLineArgs = "--enable-features=UseOzone,WaylandWindowDecorations --ozone-platform=wayland";
+    };
+  };
+
   xdg.configFile = (builtins.mapAttrs
     (name: subpath: {
       source = create_symlink "${dotfiles}/${subpath}";
