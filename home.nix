@@ -5,6 +5,7 @@ let
   configs = {
     nvim = "nvim";
     hypr = "hypr";
+    waybar = "waybar";
   };
 in
 
@@ -77,6 +78,7 @@ in
     pavucontrol # audio mixer
     playerctl # media player control CLI
     brightnessctl # brightness control CLI
+    hyprpaper
 
     # bash command to git commit and push dotfiles
     (writeShellScriptBin "nixos-commit" ''

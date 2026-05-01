@@ -1,0 +1,67 @@
+@define-color bg rgba(236, 243, 233, 0.90);
+@define-color bg-soft rgba(224, 234, 220, 0.92);
+@define-color fg #243425;
+@define-color muted #4f6651;
+@define-color accent #6fa36f;
+@define-color accent-strong #4f7f52;
+@define-color warn #a97d3a;
+@define-color crit #9f3c3c;
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
+  font-size: 13px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: @bg;
+  color: @fg;
+  border: 1px solid rgba(111, 163, 111, 0.35);
+  border-radius: 12px;
+}
+
+#workspaces {
+  margin: 5px 8px;
+}
+
+#workspaces button {
+  color: @muted;
+  background: transparent;
+  border-radius: 8px;
+  padding: 2px 9px;
+  margin: 0 3px;
+}
+
+#workspaces button:hover {
+  background: @bg-soft;
+  color: @fg;
+}
+
+#workspaces button.active {
+  background: @accent;
+  color: #eef5ea;
+}
+
+#clock,
+#network,
+#battery {
+  background: @bg-soft;
+  color: @fg;
+  border-radius: 9px;
+  padding: 2px 10px;
+  margin: 5px 6px;
+}
+
+#battery.warning {
+  color: @warn;
+}
+
+#battery.critical {
+  color: @crit;
+}
+
+#network.disconnected {
+  color: @crit;
+}

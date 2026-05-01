@@ -12,7 +12,10 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, hermes-agent, home-manager, ... }:
     let
-      pkgs-unstable = nixpkgs-unstable.legacyPackages.x86_64-linux;
+      pkgs-unstable = import nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
     in
     {
       nixosConfigurations.hermes = nixpkgs.lib.nixosSystem {

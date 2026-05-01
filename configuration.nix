@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 
 {
   imports =
@@ -128,9 +128,6 @@
     isNormalUser = true;
     description = "maxcaspar";
     extraGroups = [ "networkmanager" "wheel" "podman" ];
-    packages = with pkgs; [
-      #  thunderbird
-    ];
   };
 
   # Install firefox.
@@ -147,7 +144,7 @@
     git
     alacritty
     google-chrome
-    llama-cpp
+    (pkgs-unstable.llama-cpp.override { cudaSupport = true; })
     python313Packages.huggingface-hub
     curl
   ];
