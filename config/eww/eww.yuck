@@ -1,0 +1,89 @@
+; ── data ────────────────────────────────────────────────────────────────
+
+(defpoll weather :interval "10m"
+  :initial `{"temp":"--","feels":"--","desc":"...","humidity":"--","wind":"--"}`
+  "scripts/weather.sh")
+
+(defpoll volume :interval "2s" :initial "0"
+  "scripts/volume.sh")
+
+(defpoll bluetooth :interval "5s" :initial "bt: off"
+  "scripts/bluetooth.sh")
+
+(deflisten matrix :initial "(box)"
+  "scripts/matrix.py")
+
+; ── window ───────────────────────────────────────────────────────────────
+
+(defwindow dashboard
+  :monitor 0
+  :geometry (geometry
+    :width "680px"
+    :height "270px"
+    :anchor "top center"
+    :y "48px")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  (dashboard-widget))
+
+; ── root widget ──────────────────────────────────────────────────────────
+
+(defwidget dashboard-widget []
+  (box :class "dashboard" :orientation "v" :spacing 16 :space-evenly false
+    ; top row: calendar | matrix | weather
+    (box :orientation "h" :spacing 16 :space-evenly false :homogeneous false
+      (cal-section)
+      (matrix-panel)
+      (weather-section))
+    ; divider
+    (box :class "divider" :hexpand true)
+    ; bottom row: system + apps
+    (bottom-bar)))
+
+; ── calendar ─────────────────────────────────────────────────────────────
+
+(defwidget cal-section []
+  (box :class "side-section" :orientation "v" :valign "center" :vexpand true
+    (calendar :class "cal"
+      :show-heading true
+      :show-day-names true
+      :show-week-numbers false)))
+
+; ── matrix rain ──────────────────────────────────────────────────────────
+
+(defwidget matrix-panel []
+  (box :class "matrix-window" :orientation "v"
+    :vexpand true :hexpand false
+    :valign "fill"
+    (literal :content matrix)))
+
+; ── weather ──────────────────────────────────────────────────────────────
+
+(defwidget weather-section []
+  (box :class "side-section" :orientation "v"
+    :spacing 4 :space-evenly false
+    :valign "center" :vexpand true
+    (label :class "location" :halign "start" :text "Bamberg, BY")
+    (label :class "temp"     :halign "start" :text {weather.temp + "°C"})
+    (label :class "desc"     :halign "start" :text {weather.desc})
+    (box :orientation "v" :spacing 2 :class "details" :valign "start"
+      (label :class "detail" :halign "start" :text {"feels " + weather.feels + "°C"})
+      (label :class "detail" :halign "start" :text {weather.humidity + "% humidity"})
+      (label :class "detail" :halign "start" :text {weather.wind + " km/h wind"}))))
+
+; ── bottom bar ───────────────────────────────────────────────────────────
+
+(defwidget bottom-bar []
+  (box :orientation "h" :spacing 6 :space-evenly false :halign "start"
+    ; system
+    (button :class "pill" :onclick "blueman-manager &" bluetooth)
+    (button :class "pill" :onclick "pavucontrol &" {"vol " + volume + "%"})
+    (button :class "pill" :onclick "nm-connection-editor &" "network")
+    ; separator
+    (box :class "btn-sep")
+    ; apps
+    (button :class "pill app" :onclick "obsidian &"          "obsidian")
+    (button :class "pill app" :onclick "firefox &"           "firefox")
+    (button :class "pill app" :onclick "alacritty &"         "terminal")
+    (button :class "pill app" :onclick "alacritty -e btop &" "btop")))

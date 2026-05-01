@@ -170,13 +170,14 @@
     options = [ "defaults" "nofail" ];
   };
 
-  # keyd: space-hold = Super, tap = space. CapsLock = Escape.
+  # keyd: both Windows keys = Super. CapsLock = Escape.
   services.keyd = {
     enable = true;
     keyboards.default = {
       ids = [ "*" ];
       settings = {
         main = {
+          leftmeta = "leftmeta";
           rightalt = "leftmeta";
           capslock = "escape";
         };

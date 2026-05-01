@@ -2,19 +2,22 @@
   "layer": "top",
   "position": "top",
   "height": 34,
+  "width": 1400,
   "margin-top": 6,
-  "margin-left": 8,
-  "margin-right": 8,
-  "modules-left": ["hyprland/workspaces"],
+  "margin-left": 50,
+  "margin-right": 50,
+  "fixed-center": true,
+  "reload_style_on_change": true,
+  "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-center": ["clock"],
-  "modules-right": ["custom/voxtype", "cpu", "custom/cputemp", "custom/gpu", "network", "battery"],
+  "modules-right": ["custom/voxtype", "cpu", "custom/cputemp", "custom/gpu", "network"],
 
   "custom/voxtype": {
     "exec": "voxtype status --follow --format json",
     "return-type": "json",
     "format": "●",
     "tooltip": true,
-    "on-click": "voxtype record toggle"
+    "on-click": "voxtype status --format json | grep -q '\"recording\"' && voxtype record cancel || voxtype record start"
   },
 
   "cpu": {
@@ -37,6 +40,18 @@
     "tooltip": true
   },
 
+  "hyprland/window": {
+    "format": "{title}",
+    "max-length": 40,
+    "separate-outputs": false,
+    "rewrite": {
+      "(.*) — Mozilla Firefox": " Firefox",
+      "^.*nvim.*$": " Neovim",
+      "^.*kitty.*$": "󰄛 Kitty",
+      "^.*zsh.*$": "󰄛 Terminal"
+    }
+  },
+
   "hyprland/workspaces": {
     "disable-scroll": false,
     "all-outputs": true,
@@ -45,7 +60,8 @@
 
   "clock": {
     "format": "{:%a %d %b  %H:%M}",
-    "tooltip-format": "{:%A, %d %B %Y}"
+    "tooltip-format": "{:%A, %d %B %Y}",
+    "on-click": "eww open --toggle dashboard"
   },
 
   "network": {
@@ -54,13 +70,4 @@
     "format-disconnected": "󰖪  Offline",
     "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
   },
-
-  "battery": {
-    "states": {
-      "warning": 25,
-      "critical": 12
-    },
-    "format": "{icon} {capacity}%",
-    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
-  }
 }

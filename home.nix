@@ -6,6 +6,8 @@ let
     nvim = "nvim";
     hypr = "hypr";
     waybar = "waybar";
+    alacritty = "alacritty";
+    eww = "eww";
   };
 in
 
@@ -83,8 +85,12 @@ in
     playerctl # media player control CLI
     brightnessctl # brightness control CLI
     hyprpaper
+    eww          # widget system for dashboard panel
+    python3      # used by eww matrix rain script
+    jq           # used by eww weather script
     pkgs-unstable.voxtype-vulkan # push-to-talk speech transcription
     inotify-tools # used by waybar-reload service
+    pkgs.nerd-fonts.commit-mono # CommitMono Nerd Font
 
     # bash command to git commit and push dotfiles
     (writeShellScriptBin "nixos-commit" ''

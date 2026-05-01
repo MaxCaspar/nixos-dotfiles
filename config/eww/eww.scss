@@ -1,0 +1,143 @@
+// ── palette (matches waybar) ─────────────────────────────────────────────
+$bg:       rgba(18, 18, 20, 0.92);
+$bg-soft:  rgba(255, 255, 255, 0.06);
+$fg:       #d0d0d0;
+$muted:    #707070;
+$accent:   #909090;
+
+// matrix viewport palette
+$m-head:   #b4d4c0;   // pale mint
+$m-sage:   #7a9e87;   // sage green
+$m-lav:    #8a80a8;   // dusty lavender
+$m-dim:    #2e4039;   // dark sage
+$m-brd:    rgba(90, 130, 108, 0.22);
+
+// ── base ─────────────────────────────────────────────────────────────────
+* {
+  font-family: "CommitMono Nerd Font", monospace;
+  font-size: 12px;
+  color: $fg;
+  border: none;
+  outline: none;
+  min-height: 0;
+}
+
+// ── window ───────────────────────────────────────────────────────────────
+window {
+  background: $bg;
+  border-radius: 10px;
+  animation: slide-down 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slide-down {
+  from { opacity: 0; margin-top: -16px; }
+  to   { opacity: 1; margin-top: 0;     }
+}
+
+// ── dashboard container ───────────────────────────────────────────────────
+.dashboard {
+  padding: 16px 18px 12px;
+}
+
+// ── matrix viewport ──────────────────────────────────────────────────────
+.matrix-window {
+  background: rgba(5, 9, 7, 0.97);
+  border: 1px solid $m-brd;
+  border-radius: 6px;
+  padding: 10px 6px;
+  min-width: 196px;
+  min-height: 148px;
+}
+
+// ── side sections (calendar / weather) ───────────────────────────────────
+.side-section {
+  min-width: 152px;
+}
+
+// ── calendar ─────────────────────────────────────────────────────────────
+calendar {
+  background: transparent;
+  color: $muted;
+  font-size: 11px;
+
+  &.header {
+    color: $accent;
+    font-size: 11px;
+    padding-bottom: 2px;
+  }
+
+  &.day-name {
+    color: rgba(112, 112, 112, 0.45);
+    font-size: 10px;
+  }
+
+  &.highlight {
+    // today
+    color: $m-sage;
+    font-weight: bold;
+  }
+
+  &:selected {
+    background: $bg-soft;
+    border-radius: 3px;
+    color: $fg;
+  }
+}
+
+// ── weather ───────────────────────────────────────────────────────────────
+.location {
+  color: $muted;
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  margin-bottom: 2px;
+}
+
+.temp {
+  font-size: 26px;
+  color: $fg;
+  margin-bottom: 1px;
+}
+
+.desc {
+  color: $accent;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.detail {
+  color: $muted;
+  font-size: 10px;
+  padding: 1px 0;
+}
+
+// ── divider ───────────────────────────────────────────────────────────────
+.divider {
+  background: $bg-soft;
+  min-height: 1px;
+  margin: 0 -2px;
+}
+
+// ── bottom bar ────────────────────────────────────────────────────────────
+.btn-sep {
+  background: $bg-soft;
+  min-width: 1px;
+  margin: 0 8px;
+}
+
+.pill {
+  background: $bg-soft;
+  color: $muted;
+  border-radius: 6px;
+  padding: 4px 11px;
+  font-size: 11px;
+  min-width: 54px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.10);
+    color: $fg;
+  }
+}
+
+.app {
+  color: rgba(112, 112, 112, 0.65);
+}

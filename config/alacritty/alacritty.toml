@@ -1,0 +1,9 @@
+[window]
+padding.x = 13
+padding.y = 10
+
+[font]
+normal = { family = "CommitMono Nerd Font Mono", style = "Regular" }
+bold = { family = "CommitMono Nerd Font Mono", style = "Bold" }
+italic = { family = "CommitMono Nerd Font Mono", style = "Italic" }
+size = 11.0
