@@ -1,6 +1,6 @@
 @define-color bg transparent;
-@define-color bg-soft rgba(224, 234, 220, 0.82);
-@define-color fg #243425;
+@define-color bg-soft rgba(88, 120, 90, 0.65);
+@define-color fg #000000;
 @define-color muted #4f6651;
 @define-color accent #6fa36f;
 @define-color accent-strong #4f7f52;
@@ -46,12 +46,30 @@ window#waybar {
 
 #clock,
 #network,
-#battery {
+#battery,
+#custom-gpu,
+#custom-voxtype {
   background: @bg-soft;
   color: @fg;
   border-radius: 9px;
   padding: 2px 10px;
   margin: 5px 6px;
+}
+
+#cpu {
+  background: @bg-soft;
+  color: @fg;
+  border-radius: 9px 0 0 9px;
+  padding: 2px 6px 2px 10px;
+  margin: 5px 0 5px 6px;
+}
+
+#custom-cputemp {
+  background: @bg-soft;
+  color: @fg;
+  border-radius: 0 9px 9px 0;
+  padding: 2px 10px 2px 6px;
+  margin: 5px 6px 5px 0;
 }
 
 #battery.warning {
@@ -64,4 +82,31 @@ window#waybar {
 
 #network.disconnected {
   color: @crit;
+}
+
+#custom-voxtype.idle {
+  opacity: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+}
+
+#custom-voxtype.recording {
+  color: @crit;
+  animation: voxtype-pulse 1s ease-in-out infinite;
+}
+
+#custom-voxtype.transcribing {
+  color: @warn;
+}
+
+#custom-voxtype.stopped {
+  color: @muted;
+  opacity: 0.5;
+}
+
+@keyframes voxtype-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
 }

@@ -7,7 +7,35 @@
   "margin-right": 8,
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock"],
-  "modules-right": ["network", "battery"],
+  "modules-right": ["custom/voxtype", "cpu", "custom/cputemp", "custom/gpu", "network", "battery"],
+
+  "custom/voxtype": {
+    "exec": "voxtype status --follow --format json",
+    "return-type": "json",
+    "format": "●",
+    "tooltip": true,
+    "on-click": "voxtype record toggle"
+  },
+
+  "cpu": {
+    "interval": 2,
+    "format": "{avg_frequency:.2f}GHz  {usage}%",
+    "tooltip": false
+  },
+
+  "custom/cputemp": {
+    "exec": "awk '{sum+=$1; n++} END {printf \"%d°C\", sum/n/1000}' /sys/class/hwmon/hwmon0/temp3_input /sys/class/hwmon/hwmon0/temp5_input /sys/class/hwmon/hwmon0/temp7_input /sys/class/hwmon/hwmon0/temp9_input",
+    "interval": 2,
+    "format": "{}",
+    "tooltip": false
+  },
+
+  "custom/gpu": {
+    "exec": "nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv,noheader,nounits | awk -F', ' '{printf \"{\\\"text\\\": \\\"%.1fGB  %s%%  %s°C\\\", \\\"tooltip\\\": \\\"GPU Usage: %s%%\\\\nVRAM: %sMiB / %sMiB\\\\nGPU Temp: %s°C\\\"}\\n\", $2/1024, $1, $4, $1, $2, $3, $4}'",
+    "return-type": "json",
+    "interval": 2,
+    "tooltip": true
+  },
 
   "hyprland/workspaces": {
     "disable-scroll": false,

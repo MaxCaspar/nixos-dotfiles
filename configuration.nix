@@ -163,6 +163,27 @@
     };
   };
 
+  # HDD model storage — auto-mount on boot
+  fileSystems."/mnt/hdd" = {
+    device = "/dev/disk/by-uuid/a89afcf5-c33b-4505-b767-76566c8e68b2";
+    fsType = "ext4";
+    options = [ "defaults" "nofail" ];
+  };
+
+  # keyd: space-hold = Super, tap = space. CapsLock = Escape.
+  services.keyd = {
+    enable = true;
+    keyboards.default = {
+      ids = [ "*" ];
+      settings = {
+        main = {
+          rightalt = "leftmeta";
+          capslock = "escape";
+        };
+      };
+    };
+  };
+
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }
