@@ -1,5 +1,5 @@
-@define-color bg rgba(236, 243, 233, 0.90);
-@define-color bg-soft rgba(224, 234, 220, 0.92);
+@define-color bg transparent;
+@define-color bg-soft rgba(224, 234, 220, 0.82);
 @define-color fg #243425;
 @define-color muted #4f6651;
 @define-color accent #6fa36f;
@@ -18,7 +18,7 @@
 window#waybar {
   background: @bg;
   color: @fg;
-  border: 1px solid rgba(111, 163, 111, 0.35);
+  border: none;
   border-radius: 12px;
 }
 

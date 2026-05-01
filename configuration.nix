@@ -150,7 +150,7 @@
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  
+
   # Hermes Agent CLI
   services.hermes-agent = {
     enable = true;

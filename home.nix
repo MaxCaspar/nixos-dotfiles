@@ -62,7 +62,7 @@ in
     fastfetch # system info on terminal open
     btop # process and system monitor
     nvitop # NVIDIA GPU monitor
-    
+
     # Programs
     obsidian
 
@@ -79,6 +79,7 @@ in
     playerctl # media player control CLI
     brightnessctl # brightness control CLI
     hyprpaper
+    pkgs-unstable.voxtype-vulkan # push-to-talk speech transcription
 
     # bash command to git commit and push dotfiles
     (writeShellScriptBin "nixos-commit" ''
@@ -93,4 +94,21 @@ in
       git push
     '')
   ];
+
+  systemd.user.services.voxtype = {
+    Unit = {
+      Description = "Voxtype push-to-talk voice-to-text daemon";
+      Documentation = "https://voxtype.io";
+    };
+
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs-unstable.voxtype-vulkan}/bin/voxtype --no-hotkey --eager-processing --flash-attention daemon";
+      Restart = "on-failure";
+      RestartSec = 5;
+      Environment = "XDG_RUNTIME_DIR=%t";
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
 }
