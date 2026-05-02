@@ -23,6 +23,7 @@ in
     '';
     shellAliases = {
       bench = "nix shell nixpkgs#python3 --command python3 ~/python-scripts/model-benchmarks/bench.py";
+      neo = "neo -c cyan -D";
     };
   };
 
@@ -77,6 +78,7 @@ in
 
     # Programs
     obsidian
+    google-chrome
 
     # Hyprland desktop utilities.
     waybar # status bar
@@ -98,6 +100,11 @@ in
     pkgs-unstable.voxtype-vulkan # push-to-talk speech transcription
     inotify-tools # used by waybar-reload service
     pkgs.nerd-fonts.commit-mono # CommitMono Nerd Font
+
+    # ASCII
+    neo
+    mapscii
+    browsh
 
     # bash command to git commit and push dotfiles
     (writeShellScriptBin "nixos-commit" ''

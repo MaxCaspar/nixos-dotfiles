@@ -143,7 +143,6 @@
     wget
     git
     alacritty
-    google-chrome
     (pkgs-unstable.llama-cpp.override { cudaSupport = true; })
     python313Packages.huggingface-hub
     curl
