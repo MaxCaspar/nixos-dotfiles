@@ -26,7 +26,7 @@ in
       [ -z "$IN_NIX_SHELL" ] && fastfetch
     '';
     shellAliases = {
-      bench = "nix shell nixpkgs#python3 --command python3 ~/python-scripts/model-benchmarks/bench.py";
+      bench = "python3 ~/python-scripts/model-benchmarks/bench.py";
       neo = "neo -c cyan -D";
     };
   };

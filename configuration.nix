@@ -145,6 +145,7 @@
     kitty
     (pkgs-unstable.llama-cpp.override { cudaSupport = true; })
     python313Packages.huggingface-hub
+    python313Packages.hf-transfer
     curl
   ];
 
