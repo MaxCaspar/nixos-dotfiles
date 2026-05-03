@@ -63,6 +63,11 @@ in
     nixpkgs-fmt # Nix formatter
     gcc # C compiler for Neovim parser builds
     nodejs # JavaScript runtime for tooling
+    cargo # Rust package manager
+    rustc # Rust compiler
+    rustfmt # Rust formatter
+    clippy # Rust linter
+    rust-analyzer # Rust language server
     gh # GitHub CLI
     # ns: interactive nix package search using fzf
     (writeShellApplication {
