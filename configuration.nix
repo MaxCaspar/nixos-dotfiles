@@ -169,7 +169,7 @@
     options = [ "defaults" "nofail" ];
   };
 
-  # keyd: both Windows keys = Super. CapsLock = Escape.
+  # keyd: both Windows keys = Super.
   services.keyd = {
     enable = true;
     keyboards.default = {
@@ -178,7 +178,6 @@
         main = {
           leftmeta = "leftmeta";
           rightalt = "leftmeta";
-          capslock = "escape";
           tab = "overload(meta, tab)";
         };
       };
