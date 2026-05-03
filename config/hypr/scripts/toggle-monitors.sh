@@ -1,7 +1,7 @@
 #!/etc/profiles/per-user/maxcaspar/bin/bash
 
 HYPRCTL=/run/current-system/sw/bin/hyprctl
-ALACRITTY=/run/current-system/sw/bin/alacritty
+KITTY=/run/current-system/sw/bin/kitty
 BTOP=/etc/profiles/per-user/maxcaspar/bin/btop
 NVITOP=/etc/profiles/per-user/maxcaspar/bin/nvitop
 
@@ -24,8 +24,8 @@ if [ -n "$CPU_ADDR" ] || [ -n "$GPU_ADDR" ]; then
     [ -n "$CPU_ADDR" ] && $HYPRCTL dispatch closewindow "address:0x$CPU_ADDR"
     [ -n "$GPU_ADDR" ] && $HYPRCTL dispatch closewindow "address:0x$GPU_ADDR"
 else
-    $ALACRITTY --title ws-monitor-cpu -e $BTOP &
+    $KITTY --title ws-monitor-cpu -e $BTOP &
     sleep 0.4
     $HYPRCTL dispatch movewindow l
-    $ALACRITTY --title ws-monitor-gpu -e $NVITOP &
+    $KITTY --title ws-monitor-gpu -e $NVITOP &
 fi

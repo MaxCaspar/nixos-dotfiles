@@ -6,7 +6,8 @@ let
     nvim = "nvim";
     hypr = "hypr";
     waybar = "waybar";
-    alacritty = "alacritty";
+    kitty = "kitty";
+    fastfetch = "fastfetch";
     eww = "eww";
   };
 in
@@ -73,6 +74,7 @@ in
 
     # General system info and monitoring.
     fastfetch # system info on terminal open
+    chafa     # image-to-text for fastfetch logo
     btop # process and system monitor
     nvitop # NVIDIA GPU monitor
 
@@ -145,6 +147,8 @@ in
     Unit = {
       Description = "Voxtype push-to-talk voice-to-text daemon";
       Documentation = "https://voxtype.io";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
     };
 
     Service = {
@@ -155,6 +159,6 @@ in
       Environment = "XDG_RUNTIME_DIR=%t";
     };
 
-    Install.WantedBy = [ "default.target" ];
+    Install.WantedBy = [ "graphical-session.target" ];
   };
 }

@@ -142,7 +142,7 @@
     vim
     wget
     git
-    alacritty
+    kitty
     (pkgs-unstable.llama-cpp.override { cudaSupport = true; })
     python313Packages.huggingface-hub
     curl

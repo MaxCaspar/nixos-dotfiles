@@ -1,0 +1,48 @@
+{
+  "logo": {
+    "type": "chafa",
+    "source": "/home/maxcaspar/Pictures/Wallpapers/macro3_square.jpg",
+    "width": 44,
+    "height": 22
+  },
+  "colorKeys": "32",
+  "colorTitle": "92",
+  "modules": [
+    "break",
+    {
+      "type": "custom",
+      "format": "\u001b[1;96mWelcome Caspar, Hermes online.\u001b[0m"
+    },
+    "break",
+
+    // System
+    { "type": "os",     "keyColor": "32" },
+    { "type": "kernel", "keyColor": "32" },
+    { "type": "uptime", "keyColor": "32" },
+    "break",
+
+    // Interface
+    { "type": "shell",    "keyColor": "32" },
+    { "type": "terminal", "keyColor": "32" },
+    "break",
+
+    // Display & WM
+    { "type": "display", "keyColor": "36" },
+    { "type": "wm",      "keyColor": "36" },
+    "break",
+
+    // Hardware
+    { "type": "cpu",    "keyColor": "32" },
+    { "type": "gpu",    "keyColor": "32" },
+    { "type": "memory", "keyColor": "32" },
+    "break",
+
+    // Storage
+    { "type": "disk", "folders": "/",        "keyColor": "33" },
+    { "type": "disk", "folders": "/mnt/hdd", "keyColor": "33" },
+    "break",
+
+    // Network
+    { "type": "localip", "keyColor": "32" }
+  ]
+}
