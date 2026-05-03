@@ -179,6 +179,7 @@
           leftmeta = "leftmeta";
           rightalt = "leftmeta";
           capslock = "escape";
+          tab = "overload(meta, tab)";
         };
       };
     };
