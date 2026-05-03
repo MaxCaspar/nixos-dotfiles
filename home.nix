@@ -9,6 +9,7 @@ let
     kitty = "kitty";
     fastfetch = "fastfetch";
     eww = "eww";
+    mako = "mako";
   };
 in
 
@@ -16,9 +17,11 @@ in
   home.username = "maxcaspar";
   home.homeDirectory = "/home/maxcaspar";
   home.stateVersion = "25.11";
+
   programs.bash = {
     enable = true;
     initExtra = ''
+      export HERMES_HOME="$HOME/.hermes"
       eval "$(starship init bash)"
       [ -z "$IN_NIX_SHELL" ] && fastfetch
     '';
@@ -26,6 +29,14 @@ in
       bench = "nix shell nixpkgs#python3 --command python3 ~/python-scripts/model-benchmarks/bench.py";
       neo = "neo -c cyan -D";
     };
+  };
+
+  programs.tmux = {
+    enable = true;
+    prefix = "C-Space";
+    extraConfig = ''
+      bind C-Space send-prefix
+    '';
   };
 
   programs.git = {
@@ -158,7 +169,7 @@ in
 
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs-unstable.voxtype-vulkan}/bin/voxtype --no-hotkey --eager-processing --flash-attention --auto-submit daemon";
+      ExecStart = "${pkgs-unstable.voxtype-vulkan}/bin/voxtype --no-hotkey --flash-attention --auto-submit daemon";
       Restart = "on-failure";
       RestartSec = 5;
       Environment = "XDG_RUNTIME_DIR=%t";
