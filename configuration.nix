@@ -43,8 +43,17 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+
+  # Minimal TTY-like login with session selection (Hyprland / GNOME).
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --greeting \"welcome to hermes\" --asterisks --remember --remember-session --sessions /run/current-system/sw/share/wayland-sessions --theme \"background=dark;border=cyan;text=white;prompt=cyan;action=#222222;input=white;button=cyan\"";
+      };
+    };
+  };
 
   # Add Hyprland as an extra GDM session while keeping GNOME available.
   programs.hyprland = {
