@@ -10,10 +10,39 @@
 (defpoll bluetooth :interval "5s" :initial "bt: off"
   "scripts/bluetooth.sh")
 
+(defpoll bt-info :interval "3s"
+  :initial `{"connected": false, "name": "", "battery": "", "mac": ""}`
+  "scripts/bluetooth-popup.sh")
+
 (deflisten matrix :initial "(box)"
   "scripts/matrix.py")
 
 ; ── window ───────────────────────────────────────────────────────────────
+
+(defwindow volume-popup
+  :monitor 0
+  :geometry (geometry
+    :width "40px"
+    :height "150px"
+    :anchor "top right"
+    :x "1021px"
+    :y "10px")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  (volume-widget))
+
+(defwindow bluetooth-popup
+  :monitor 0
+  :geometry (geometry
+    :width "200px"
+    :anchor "top right"
+    :x "895px"
+    :y "10px")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  (bluetooth-widget))
 
 (defwindow dashboard
   :monitor 0
@@ -21,11 +50,40 @@
     :width "680px"
     :height "270px"
     :anchor "top center"
-    :y "48px")
+    :y "10px")
   :stacking "overlay"
   :exclusive false
   :focusable false
   (dashboard-widget))
+
+; ── volume popup ─────────────────────────────────────────────────────────
+
+(defwidget volume-widget []
+  (box :class "vol-popup"
+    (scale :class "vol-slider"
+           :orientation "v"
+           :flipped true
+           :value {volume}
+           :min 0
+           :max 100
+           :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ $(printf '%.0f' {})%")))
+
+; ── bluetooth popup ──────────────────────────────────────────────────────
+
+(defwidget bluetooth-widget []
+  (box :class "bt-popup" :orientation "v" :spacing 10 :space-evenly false
+    (box :orientation "h" :spacing 12 :valign "center" :space-evenly false
+      (label :class "bt-icon" :text {bt-info.connected ? "󰂱" : "󰂯"})
+      (box :orientation "v" :spacing 2 :space-evenly false :valign "center"
+        (label :class "bt-name" :halign "start"
+               :text {bt-info.connected ? bt-info.name : "not connected"})
+        (label :class "bt-battery" :halign "start" :visible {bt-info.connected}
+               :text {bt-info.battery + "%"})))
+    (box :orientation "h" :spacing 6 :halign "start"
+      (button :class "pill"
+              :onclick "bluetoothctl ${bt-info.connected ? "disconnect" : "connect"} ${bt-info.mac} &"
+              {bt-info.connected ? "disconnect" : "connect"})
+      (button :class "pill" :onclick "blueman-manager &" "manage"))))
 
 ; ── root widget ──────────────────────────────────────────────────────────
 

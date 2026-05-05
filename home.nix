@@ -29,6 +29,7 @@ in
       bench = "python3 ~/python-scripts/model-benchmarks/bench.py";
       neo = "neo -c cyan -D";
       dotclaude = "cd ~/dotfiles && claude";
+      dotcodex = "cd ~/dotfiles && codex";
     };
   };
 

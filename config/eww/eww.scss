@@ -117,6 +117,55 @@ calendar {
   margin: 0 -2px;
 }
 
+// ── volume popup ──────────────────────────────────────────────────────────
+.vol-popup {
+  padding: 10px 14px;
+}
+
+.vol-slider {
+  trough {
+    min-width: 4px;
+    background: $bg-soft;
+    border-radius: 2px;
+  }
+
+  highlight {
+    min-width: 4px;
+    background: $accent;
+    border-radius: 2px;
+  }
+
+  slider {
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 50%;
+    background: $fg;
+    margin: 0 -3px;
+    box-shadow: none;
+  }
+}
+
+// ── bluetooth popup ───────────────────────────────────────────────────────
+.bt-popup {
+  padding: 14px 16px 12px;
+}
+
+.bt-icon {
+  font-size: 24px;
+  color: $accent;
+  min-width: 30px;
+}
+
+.bt-name {
+  font-size: 12px;
+  color: $fg;
+}
+
+.bt-battery {
+  font-size: 10px;
+  color: $muted;
+}
+
 // ── bottom bar ────────────────────────────────────────────────────────────
 .btn-sep {
   background: $bg-soft;

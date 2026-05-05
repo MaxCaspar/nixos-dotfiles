@@ -14,6 +14,8 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelParams = [ "loglevel=3" ];
+
   networking.hostName = "hermes"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -206,6 +208,23 @@
   };
 
   systemd.services.NetworkManager-wait-online.enable = false;
+
+  systemd.services.bluetooth-mouse-autoconnect = {
+    description = "Auto-connect Bluetooth mouse on boot";
+    after = [ "bluetooth.service" ];
+    wants = [ "bluetooth.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "bt-connect" ''
+        for i in $(seq 1 10); do
+          ${pkgs.bluez}/bin/bluetoothctl connect ED:68:29:47:BC:1D && exit 0
+          sleep 5
+        done
+      '';
+      RemainAfterExit = false;
+    };
+  };
 
   system.stateVersion = "25.11"; # Did you read the comment?
 

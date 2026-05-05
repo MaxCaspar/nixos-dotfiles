@@ -53,6 +53,8 @@ window#waybar {
 
 #clock,
 #network,
+#bluetooth,
+#pulseaudio,
 #custom-gpu,
 #custom-voxtype {
   background: @bg-soft;
