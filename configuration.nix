@@ -14,7 +14,6 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
   networking.hostName = "hermes"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -50,7 +49,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --greeting \"welcome to hermes\" --asterisks --remember --remember-session --sessions /run/current-system/sw/share/wayland-sessions --theme \"background=dark;border=cyan;text=white;prompt=cyan;action=#222222;input=white;button=cyan\"";
+        command = "${pkgs.tuigreet}/bin/tuigreet --greeting \"welcome to hermes\" --asterisks --remember --remember-session --sessions /run/current-system/sw/share/wayland-sessions --theme \"background=dark;border=cyan;text=white;prompt=cyan;action=#222222;input=white;button=cyan\"";
       };
     };
   };
@@ -107,6 +106,18 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
+    settings = {
+      General.FastConnectable = true;
+      Policy = {
+        ReconnectAttempts = 7;
+        ReconnectIntervals = "1,2,4,8,16,32,64";
+      };
+    };
+  };
+
+  systemd.services.bluetooth.serviceConfig = {
+    Restart = "on-failure";
+    RestartSec = "1s";
   };
   services.blueman.enable = true;
 
@@ -193,6 +204,8 @@
       };
     };
   };
+
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   system.stateVersion = "25.11"; # Did you read the comment?
 
