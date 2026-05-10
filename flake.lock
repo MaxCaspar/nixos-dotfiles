@@ -132,6 +132,19 @@
         "type": "github"
       }
     },
+    "pim-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1778366857,
+        "narHash": "sha256-tJ+OoMuIssDMhhYk4vfZYf6KQc+elA/nOBPuNi2uTDI=",
+        "path": "/home/maxcaspar/projects/antiphon/pim",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/maxcaspar/projects/antiphon/pim",
+        "type": "path"
+      }
+    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -225,7 +238,8 @@
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "pim-src": "pim-src"
       }
     },
     "uv2nix": {

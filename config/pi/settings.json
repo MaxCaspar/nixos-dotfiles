@@ -1,0 +1,22 @@
+{
+  "extensions": [
+    "~/.pi/agent/extensions/llama-cpp.ts",
+    "~/.pi/agent/extensions/pi-chat-link.ts",
+    "~/.pi/agent/extensions/peer-model.ts"
+  ],
+  "defaultProvider": "llama-cpp",
+  "defaultModel": "qwen3.5-27b-q4km",
+  "theme": "dark",
+  "quietStartup": true,
+  "compaction": {
+    "enabled": false,
+    "reserveTokens": 16384,
+    "keepRecentTokens": 20000
+  },
+  "lastChangelogVersion": "0.73.0",
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "steeringMode": "one-at-a-time",
+  "enableInstallTelemetry": false
+}

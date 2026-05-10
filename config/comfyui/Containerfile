@@ -1,0 +1,46 @@
+FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# System dependencies + Python 3.12 via deadsnakes PPA (22.04 ships 3.10)
+RUN apt-get update && apt-get install -y software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update && apt-get install -y \
+    python3.12 python3.12-venv python3.12-dev python3-pip \
+    git wget curl build-essential ninja-build libgl1 libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/* \
+    && update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1 \
+    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
+
+RUN python3.12 -m ensurepip --upgrade && pip install --upgrade pip setuptools wheel packaging
+
+# Clone ComfyUI
+RUN git clone https://github.com/comfyanonymous/ComfyUI /opt/ComfyUI
+WORKDIR /opt/ComfyUI
+
+# PyTorch with CUDA 12.4
+RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+
+# ComfyUI requirements + extras from the pro setup
+RUN pip install -r requirements.txt
+RUN pip install \
+    onnxruntime-gpu \
+    "accelerate>=1.1.1" \
+    "diffusers>=0.31.0" \
+    "transformers>=4.39.3" \
+    ninja triton
+
+# Build SageAttention from source for RTX 3090 (Ampere sm_86)
+# Note: the Windows script targets Blackwell sm_120 — we use sm_86 for RTX 3090
+RUN git clone https://github.com/thu-ml/SageAttention /tmp/SageAttention \
+    && cd /tmp/SageAttention \
+    && TORCH_CUDA_ARCH_LIST="8.6" MAX_JOBS=8 pip install . --no-build-isolation \
+    && rm -rf /tmp/SageAttention
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 8188
+ENTRYPOINT ["/entrypoint.sh"]

@@ -8,9 +8,13 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pim-src = {
+      url = "path:/home/maxcaspar/projects/antiphon/pim";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, hermes-agent, home-manager, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, hermes-agent, home-manager, pim-src, ... }:
     let
       pkgs-unstable = import nixpkgs-unstable {
         system = "x86_64-linux";
@@ -32,7 +36,7 @@
               useUserPackages = true;
               users.maxcaspar = import ./home.nix;
               backupFileExtension = "backup";
-              extraSpecialArgs = { inherit pkgs-unstable; };
+              extraSpecialArgs = { inherit pkgs-unstable pim-src; };
             };
           }
         ];

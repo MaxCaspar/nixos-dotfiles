@@ -1,0 +1,1 @@
+/home/maxcaspar/projects/antiphon/.pi/extensions/pi-chat-link.ts

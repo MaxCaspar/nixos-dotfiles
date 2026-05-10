@@ -82,6 +82,24 @@
 
   boot.kernelModules = [ "nvidia" ];
 
+  systemd.services.nvidia-power-limit = {
+    description = "Set NVIDIA GPU power limit";
+    after = [ "systemd-modules-load.service" "systemd-udev-settle.service" ];
+    wants = [ "systemd-udev-settle.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "nvidia-power-limit" ''
+        for i in $(${pkgs.coreutils}/bin/seq 1 12); do
+          ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -i 0 -pl 300 && exit 0
+          ${pkgs.coreutils}/bin/sleep 5
+        done
+
+        exit 1
+      '';
+    };
+  };
+
   # Virtualisation via Podman
   virtualisation = {
     containers.enable = true;
@@ -109,10 +127,15 @@
     enable = true;
     powerOnBoot = true;
     settings = {
-      General.FastConnectable = true;
+      General = {
+        FastConnectable = true;
+        Experimental = true;
+        Privacy = "device";
+      };
       Policy = {
         ReconnectAttempts = 7;
         ReconnectIntervals = "1,2,4,8,16,32,64";
+        JustWorksRepairing = "always";
       };
     };
   };
@@ -166,8 +189,7 @@
     git
     kitty
     (pkgs-unstable.llama-cpp.override { cudaSupport = true; })
-    python313Packages.huggingface-hub
-    python313Packages.hf-transfer
+    (python313.withPackages (ps: with ps; [ huggingface-hub hf-transfer ]))
     curl
   ];
 
@@ -180,7 +202,16 @@
     settings = {
       model = {
         base_url = "http://127.0.0.1:8080/v1";
-        default = "qwen3.5-27b-q5kx";
+        default = "qwen3.5-27b-q5kxl";  # Qwen 3.5 Q5_K_XL (quality preferred)
+      };
+      # Optional: add advanced settings for better performance
+      advanced = {
+        # Temperature for sampling (lower = more deterministic)
+        temperature = 0.7;
+        # Top-p nucleus sampling
+        top_p = 0.9;
+        # Max tokens per response
+        max_tokens = 4096;
       };
     };
   };
