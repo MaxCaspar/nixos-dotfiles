@@ -11,8 +11,5 @@ width=400
 format=%s
 layer=overlay
 
-[app-name=blueman]
-invisible=1
-
 [app-name=kitty summary="Claude Code"]
 invisible=1

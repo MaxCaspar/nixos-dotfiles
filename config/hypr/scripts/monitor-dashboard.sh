@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Toggle monitor dashboard on workspace 9.
 # Layout:
-#   top-left:   btop   | top-middle: neo  | right: terminal (full height)
+#   top-left:   btop   | top-middle: nixi | right: terminal (full height)
 #   bottom:     nvitop (spans left 2/3)   |
 
 wait_for_window() {
@@ -25,19 +25,19 @@ fi
 hyprctl dispatch exec "kitty --title ws-monitor-term"
 wait_for_window "ws-monitor-term"
 
-# 2. Neo opens to the left of the terminal
+# 2. Nixi opens to the left of the terminal
 hyprctl dispatch focuswindow "title:^(ws-monitor-term)$"
 hyprctl dispatch layoutmsg "preselect l"
-hyprctl dispatch exec "kitty --title ws-monitor-neo -e neo -c cyan -D"
+hyprctl dispatch exec "kitty --title ws-monitor-neo -e nixi"
 wait_for_window "ws-monitor-neo"
 
-# 3. nvitop opens below neo (spans the left 2/3 bottom)
+# 3. nvitop opens below nixi (spans the left 2/3 bottom)
 hyprctl dispatch focuswindow "title:^(ws-monitor-neo)$"
 hyprctl dispatch layoutmsg "preselect d"
 hyprctl dispatch exec "kitty --title ws-monitor-gpu -e nvitop"
 wait_for_window "ws-monitor-gpu"
 
-# 4. btop opens to the left of neo (top-left slot)
+# 4. btop opens to the left of nixi (top-left slot)
 hyprctl dispatch focuswindow "title:^(ws-monitor-neo)$"
 hyprctl dispatch layoutmsg "preselect l"
 hyprctl dispatch exec "kitty --title ws-monitor-cpu -e btop"

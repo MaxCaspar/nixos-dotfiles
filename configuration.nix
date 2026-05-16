@@ -14,7 +14,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = [ "loglevel=3" ];
+  boot.kernelParams = [ "loglevel=3" "usbcore.autosuspend=-1" ];
 
   networking.hostName = "hermes"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -72,7 +72,10 @@
 
   # RTX 3090 Nvidia
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = false;
@@ -91,7 +94,7 @@
       Type = "oneshot";
       ExecStart = pkgs.writeShellScript "nvidia-power-limit" ''
         for i in $(${pkgs.coreutils}/bin/seq 1 12); do
-          ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -i 0 -pl 300 && exit 0
+          ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -i 0 -pl 288 && exit 0
           ${pkgs.coreutils}/bin/sleep 5
         done
 
@@ -126,24 +129,8 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    settings = {
-      General = {
-        FastConnectable = true;
-        Experimental = true;
-        Privacy = "device";
-      };
-      Policy = {
-        ReconnectAttempts = 7;
-        ReconnectIntervals = "1,2,4,8,16,32,64";
-        JustWorksRepairing = "always";
-      };
-    };
   };
 
-  systemd.services.bluetooth.serviceConfig = {
-    Restart = "on-failure";
-    RestartSec = "1s";
-  };
   services.blueman.enable = true;
 
   # Enable sound with pipewire.
@@ -177,6 +164,13 @@
 
   # Install firefox.
   programs.firefox.enable = true;
+
+  # Steam
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = false;
+  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -239,23 +233,6 @@
   };
 
   systemd.services.NetworkManager-wait-online.enable = false;
-
-  systemd.services.bluetooth-mouse-autoconnect = {
-    description = "Auto-connect Bluetooth mouse on boot";
-    after = [ "bluetooth.service" ];
-    wants = [ "bluetooth.service" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = pkgs.writeShellScript "bt-connect" ''
-        for i in $(seq 1 10); do
-          ${pkgs.bluez}/bin/bluetoothctl connect ED:68:29:47:BC:1D && exit 0
-          sleep 5
-        done
-      '';
-      RemainAfterExit = false;
-    };
-  };
 
   system.stateVersion = "25.11"; # Did you read the comment?
 

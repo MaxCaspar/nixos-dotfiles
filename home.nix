@@ -31,14 +31,15 @@ in
       basil = "PI_LINK_ID=Basil PI_LINK_PEER=Aria  PI_CENTER_ID=center pi";
       bench = "python3 ~/python-scripts/model-benchmarks/bench.py";
       neo = "neo -c cyan -D";
+      nixi = "nixi";
       dotclaude = "cd ~/dotfiles && claude";
       dotcodex = "cd ~/dotfiles && codex";
       # Qwen 3.5 Q4_K_M - Faster, more context (262K), 37.6 t/s
       qwen354 = "llama-server -m ~/models/qwen3.5-27b/Qwen3.5-27B-Q4_K_M.gguf --host 127.0.0.1 --port 8080 -ngl 99 -fa on -c 262144 --cache-type-k q4_0 --cache-type-v q4_0 --threads 12 --jinja --alias qwen3.5-27b-q4km";
       # Qwen 3.5 Q5_K_XL - Better quality, 131K context, 31.0 t/s
       qwen355 = "llama-server -m ~/models/qwen3.5-27b/Qwen3.5-27B-UD-Q5_K_XL.gguf --host 127.0.0.1 --port 8080 -ngl 99 -fa on -c 131072 --cache-type-k q4_0 --cache-type-v q4_0 --threads 12 --jinja --alias qwen3.5-27b-q5kxl";
-      # Qwen 3.6 Q4_K_M - Newer model, 131K context, 38.3 t/s (q8_0 KV)
-      qwen36 = "llama-server -m ~/models/qwen3.6-27b/Qwen3.6-27B-Q4_K_M.gguf --host 127.0.0.1 --port 8080 -ngl 99 -fa on -c 131072 --cache-type-k q8_0 --cache-type-v q8_0 --threads 12 --jinja --alias qwen3.6-27b-q4km";
+      # Qwen 3.6 Q4_K_M - Newer model, 262K context (q4_0 KV)
+      qwen36 = "llama-server -m ~/models/qwen3.6-27b/Qwen3.6-27B-Q4_K_M.gguf --host 127.0.0.1 --port 8080 -ngl 99 -fa on -c 262144 --cache-type-k q4_0 --cache-type-v q4_0 --threads 12 --jinja --alias qwen3.6-27b-q4km";
     };
   };
 
@@ -62,6 +63,33 @@ in
     enable = true;
     package = pkgs.vscode.override {
       commandLineArgs = "--enable-features=UseOzone,WaylandWindowDecorations --ozone-platform=wayland";
+    };
+  };
+
+  xdg.desktopEntries.google-chrome = {
+    name = "Google Chrome";
+    genericName = "Web Browser";
+    exec = "${pkgs.google-chrome}/bin/google-chrome-stable --js-flags=\"--jitless\" %U";
+    terminal = false;
+    icon = "google-chrome";
+    startupNotify = true;
+    categories = [ "Network" "WebBrowser" ];
+    mimeType = [
+      "application/pdf" "application/rdf+xml" "application/rss+xml"
+      "application/xhtml+xml" "application/xhtml_xml" "application/xml"
+      "image/gif" "image/jpeg" "image/png" "image/webp"
+      "text/html" "text/xml"
+      "x-scheme-handler/http" "x-scheme-handler/https" "x-scheme-handler/google-chrome"
+    ];
+    actions = {
+      "new-window" = {
+        name = "New Window";
+        exec = "${pkgs.google-chrome}/bin/google-chrome-stable --js-flags=\"--jitless\"";
+      };
+      "new-private-window" = {
+        name = "New Incognito Window";
+        exec = "${pkgs.google-chrome}/bin/google-chrome-stable --js-flags=\"--jitless\" --incognito";
+      };
     };
   };
 
@@ -115,6 +143,7 @@ in
     # General system info and monitoring.
     fastfetch # system info on terminal open
     chafa     # image-to-text for fastfetch logo
+    aria2 # multi-connection downloader for large model files
     btop # process and system monitor
     nvitop # NVIDIA GPU monitor
 
@@ -150,6 +179,36 @@ in
 
     # AI Harness
     # pi-coding-agent installed via npm to ~/.npm-global
+
+    # Fast HuggingFace model downloader using aria2 (16 connections per file)
+    (writeShellScriptBin "hfget" ''
+      if [ -z "$1" ] || [ -z "$2" ]; then
+        echo "Usage: hfget <repo-id> <local-dir>"
+        echo "Example: hfget Wan-AI/Wan2.2-I2V-A14B /mnt/hdd/comfyui/models/Wan2.2-I2V-A14B"
+        exit 1
+      fi
+      REPO="$1"
+      DIR="$2"
+      mkdir -p "$DIR"
+      echo "Fetching file list for $REPO..."
+      python3 -c "
+from huggingface_hub import list_repo_files, hf_hub_url
+import sys
+repo = sys.argv[1]
+for f in list_repo_files(repo):
+    print(hf_hub_url(repo, f))
+" "$REPO" > /tmp/hf_urls.txt
+      echo "Downloading $(wc -l < /tmp/hf_urls.txt) files with aria2c..."
+      aria2c \
+        --input-file=/tmp/hf_urls.txt \
+        --dir="$DIR" \
+        --max-connection-per-server=16 \
+        --split=16 \
+        --min-split-size=1M \
+        --max-concurrent-downloads=4 \
+        --continue=true \
+        --auto-file-renaming=false
+    '')
 
     # ComfyUI via Podman with NVIDIA GPU + SageAttention
     (writeShellScriptBin "comfyui-build" ''
