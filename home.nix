@@ -23,6 +23,7 @@ in
     enable = true;
     initExtra = ''
       export HERMES_HOME="$HOME/.hermes"
+      [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
       eval "$(starship init bash)"
       [ -z "$IN_NIX_SHELL" ] && fastfetch
     '';
@@ -40,6 +41,8 @@ in
       qwen355 = "llama-server -m ~/models/qwen3.5-27b/Qwen3.5-27B-UD-Q5_K_XL.gguf --host 127.0.0.1 --port 8080 -ngl 99 -fa on -c 131072 --cache-type-k q4_0 --cache-type-v q4_0 --threads 12 --jinja --alias qwen3.5-27b-q5kxl";
       # Qwen 3.6 Q4_K_M - Newer model, 262K context (q4_0 KV)
       qwen36 = "llama-server -m ~/models/qwen3.6-27b/Qwen3.6-27B-Q4_K_M.gguf --host 127.0.0.1 --port 8080 -ngl 99 -fa on -c 262144 --cache-type-k q4_0 --cache-type-v q4_0 --threads 12 --jinja --alias qwen3.6-27b-q4km";
+      # Qwen 3.6 MTP Q4_K_XL - Multi-token prediction, ~1.5x faster
+      qwen36mtp = "llama-server -m /mnt/hdd/models/qwen3.6-27b-mtp/Qwen3.6-27B-UD-Q3_K_XL.gguf --host 127.0.0.1 --port 8080 -ngl 99 -fa on -c 65536 --cache-type-k q4_0 --cache-type-v q4_0 --threads 12 --jinja --alias qwen3.6-27b-mtp-q3kxl --spec-type draft-mtp --spec-draft-n-max 2";
     };
   };
 

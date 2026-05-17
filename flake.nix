@@ -19,6 +19,26 @@
       pkgs-unstable = import nixpkgs-unstable {
         system = "x86_64-linux";
         config.allowUnfree = true;
+        overlays = [
+          (final: prev: {
+            llama-cpp = prev.llama-cpp.overrideAttrs (old: {
+              version = "9186";
+              src = prev.fetchFromGitHub {
+                owner = "ggml-org";
+                repo = "llama.cpp";
+                tag = "b9186";
+                hash = "sha256-JK9VVgznYkhDt+NGbdT55FIs0uLZAJnZoNfAdUuwsPM=";
+                leaveDotGit = true;
+                postFetch = ''
+                  git -C "$out" rev-parse --short HEAD > $out/COMMIT
+                  find "$out" -name .git -print0 | xargs -0 rm -rf
+                '';
+              };
+              npmRoot = "tools/ui";
+              npmDepsHash = "sha256-WaEePrEZ7O/7deP2KJhe0AwiSKYA8HOqETmMHUkmBe0=";
+            });
+          })
+        ];
       };
     in
     {
